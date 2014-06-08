@@ -35,6 +35,11 @@
                     <a href="#" class="filtro">Stylus</a>
                     <a href="#" class="publicar">Publicar</a>
                 </div>
+                <div>
+                    <a href="#12" class="sizer">A</a>
+                    <a href="#16" class="sizer">A</a>
+                    <a href="#22" class="sizer">A</a>
+                </div>
             </div>
             <div class="usuario">
                 <figure class="avatar">
@@ -67,7 +72,7 @@
             <p><label for="tag">Tag</label>
                 <input placeholder="Ingrese el tag" id="tag" type="text" name="tag">
             </p>
-
+            
             <input value="Publicar" type="submit"/>
         </form>
         <section class="posts">
@@ -161,7 +166,7 @@
                 <div class="acciones">
                     <div class="votos">
                         <a href="#" class="up"></a>
-                        <span class="total">156</span>
+                        <span class="total">77</span>
                         <a href="#" class="down"></a>
 
                     </div>
@@ -294,10 +299,53 @@
 
                     $('input[type=text]').val('');
                     $('form').slideUp();
-
                 }
-            });
-                       
+
+                function crearSizer(pixels) {
+                    return function() {
+                        $('body').css('font-size',pixels + 'px');
+                    }
+                }
+
+                $('.sizer').each(function(index,element){
+
+                    var pixels = $(element).prop('hash').substring(1);
+
+                    $(element)
+                        .css('font-size', pixels + 'px')
+                        .on('click', crearSizer(pixels));
+                });
+
+                function crearContador(valorInicial){
+                    var contador = valorInicial || 0;
+
+                    return {
+                        up : function(){
+                            return contador++;
+                        },
+                        down : function(){
+                            return contador--;
+                        }
+                    };
+                }
+
+                $('.total').each(function(index, element){
+                    var contTotal = crearContador(element.innerHTML);
+
+                    $(element)
+                        .siblings('.up')
+                            .on('click', function(ev){
+                                ev.preventDefault();
+                                $(element).html(contTotal.up());
+                            })
+                            .siblings('.down')
+                                .on('click', function(ev){ 
+                                    ev.preventDefault();
+                                    $(element).html(contTotal.down());
+                                });
+                });
+
+            });     
         </script>
     </body>
 </html>
